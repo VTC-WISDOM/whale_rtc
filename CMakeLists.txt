@@ -16,6 +16,11 @@ target_include_directories(${target} INTERFACE
 )
 
 target_link_libraries(${target} INTERFACE
+	hardware_i2c
+	hardware_gpio
+)
+
+target_link_libraries(${target} INTERFACE
 	rp2x_pcf8523_lib
 )
 

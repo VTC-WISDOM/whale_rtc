@@ -20,7 +20,7 @@ int w_rtc_init(void) {
 	if(!pcf8523_time_circuit_start(i2c_index)) return RTC_ERR;
 
 	//enable bat switchover
-	if(!pcf8523_bso_int_enable(i2c_index)) return RTC_ERR;
+	if(!pcf8523_pm_function_set(i2c_index, 0x0)) return RTC_ERR;
 
 	//set 24h mode
 	if(!pcf8523_hour_mode_set(i2c_index, HOUR_MODE_24)) return RTC_ERR;
@@ -35,16 +35,12 @@ int w_rtc_datetime_get(struct w_rtc_datetime_t *_datetime) {
 
 	uint i2c_index = I2C_NUM(W_RTC_I2C);
 	//pull the registers
-	uint8_t _dst[7] = {0};
-	if(!pcf8523_time_date_reg_get_all(i2c_index, _dst)) return RTC_ERR;
-
-	_datetime->seconds = _dst[0];
-	_datetime->minutes = _dst[1];
-	_datetime->hours   = _dst[2];
-	_datetime->days    = _dst[3];
-	//_datetime->weekdays;
-	_datetime->months  = _dst[5];
-	_datetime->years   = _dst[6];
-
+	pcf8523_seconds_get(i2c_index, &_datetime->seconds);
+	pcf8523_minutes_get(i2c_index, &_datetime->minutes);
+	pcf8523_hours_get(i2c_index, &_datetime->hours);
+	pcf8523_days_get(i2c_index, &_datetime->days);
+	pcf8523_months_get(i2c_index, &_datetime->months);
+	pcf8523_years_get(i2c_index, &_datetime->years);
+	
 	return RTC_OK;
 }

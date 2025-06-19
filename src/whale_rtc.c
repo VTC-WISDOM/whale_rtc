@@ -14,19 +14,19 @@ int w_rtc_init(void) {
 	gpio_pull_up(W_RTC_SDA);
 
 	//set caps
-	if(!pcf8523_cap_sel_set(i2c_index, CAP_SEL_7_PF)) return RTC_ERR;
+	if(!pcf8523_cap_sel_set(i2c_index, CAP_SEL_7_PF)) return W_RTC_ERR;
 
 	//ensure time is running
-	if(!pcf8523_time_circuit_start(i2c_index)) return RTC_ERR;
+	if(!pcf8523_time_circuit_start(i2c_index)) return W_RTC_ERR;
 
 	//enable bat switchover
-	if(!pcf8523_pm_function_set(i2c_index, 0x0)) return RTC_ERR;
+	if(!pcf8523_pm_function_set(i2c_index, 0x0)) return W_RTC_ERR;
 
 	//set 24h mode
-	if(!pcf8523_hour_mode_set(i2c_index, HOUR_MODE_24)) return RTC_ERR;
+	if(!pcf8523_hour_mode_set(i2c_index, HOUR_MODE_24)) return W_RTC_ERR;
 
 
-	return RTC_OK;
+	return W_RTC_OK;
 }
 
 
@@ -42,5 +42,5 @@ int w_rtc_datetime_get(struct w_rtc_datetime_t *_datetime) {
 	pcf8523_months_get(i2c_index, &_datetime->months);
 	pcf8523_years_get(i2c_index, &_datetime->years);
 	
-	return RTC_OK;
+	return W_RTC_OK;
 }
